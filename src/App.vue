@@ -1,14 +1,14 @@
 <template>
   <div id="app">
-   <LOGIN/>
+   <HOME/>
   </div>
 </template>
 <script>
-  import LOGIN from "./components/Login";
+  import HOME from "./components/Home";
   export default {
     name: 'app',
     components: {
-      LOGIN
+      HOME
     }
   }
 </script>

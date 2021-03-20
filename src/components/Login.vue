@@ -1,19 +1,11 @@
-<script>
-    // import {getCookies,changeUrl,isEmpty} from "../assets/js/util"
-    // import {NICK_NAME} from "../assets/js/const"
-    // let nickname = getCookies(NICK_NAME);
-    // if(!isEmpty(nickname)){
-    //     changeUrl(URL_MESSAGE_LIST)
-    // }
-</script>
 <style>
     .login {
         width: 400px;
         margin: 0 auto;
     }
-
 </style>
 <template>
+  <div id="app">
     <div class="login">
         <div class="ivu-login">
             <form autocomplete="off" class="ivu-form ivu-form-label-right">
@@ -51,5 +43,6 @@
             </form>
         </div>
     </div>
+  </div>
 </template>
 

@@ -10,24 +10,23 @@
   "dependencies": {
     "@popperjs/core": "^2.9.1",
     "axios": "^0.21.1",
-    "compression-webpack-plugin": "^7.1.2",
+    "compression-webpack-plugin": "^6.1.1",
     "core-js": "^3.6.5",
     "gifsicle": "^5.2.0",
     "image-webpack-loader": "^7.0.1",
     "install": "^0.13.0",
-    "js-cookies": "^1.0.4",
     "less": "3.5.0",
     "less-loader": "7.0.0",
     "moment": "^2.29.1",
     "node-sass": "^5.0.0",
     "qs": "^6.10.0",
-    "sass-loader": "^11.0.1",
+    "sass-loader": "^10.0.1",
     "view-design": "^4.5.0",
     "vue": "^2.6.11",
     "vue-cli": "^2.9.6",
     "vue-cli-configjs": "^2.0.0",
     "vue-router": "^3.5.1",
-    "webpack": "^5.27.0"
+    "webpack": "^4.36.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

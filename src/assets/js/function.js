@@ -1,5 +1,7 @@
-import {getCookies, setCookies, changeUrl, clearCookies, isEmpty} from "./util";
+import {URL_CHECK_TOKEN,URL_TOKEN,NICK_NAME,TOKEN} from "./const"
 import axios from 'axios';
+import $ from "jquery"
+import VueCookie from 'vue-cookie'
 function checkToken(){
     let ret = null;
     $.get({
@@ -26,25 +28,25 @@ function getToken(nickanme,password){
 }
 
 function permssion(){
-    let localname = getCookies(NICK_NAME)
+    let localname = VueCookie.get(NICK_NAME)
     if(localname=="" || localname ==null){
-        changeUrl("/")
+        console.log("localname=null")
     }
-    let localToken = getCookies(TOKEN)
+    let localToken = VueCookie.get(TOKEN)
     if(localToken=="" || localToken== null){
         let res = getToken(localname,null)
         let [flag,data] = checkResponse(res)
         if(flag){
             updateCookies(data)
         }else{
-            clearCookies(NICK_NAME)
-            changeUrl(URL_LOGIN)
+            VueCookie.delete(NICK_NAME)
+
         }
     }
 }
 function updateCookies(data){
-    setCookies(TOKEN,data.token,{ expires: new Date(data.expireTime) })
-    setCookies(NICK_NAME,data.userInfo.nickname,{ expires: 30 })
+    VueCookie.set(TOKEN,data.token,{ expires: new Date(data.expireTime) })
+    VueCookie.set(NICK_NAME,data.userInfo.nickname,{ expires: 30 })
 }
 function checkResponse(res,async){
     if(async){
@@ -55,8 +57,7 @@ function checkResponse(res,async){
     if(errcode=="00000"){
         return [true,res.data];
     }else if(errcode=="A0230"){
-        clearCookies(TOKEN)
-        changeUrl(URL_LOGIN)
+        VueCookie.delete(TOKEN)
     }else {
         return [false,errmsg]
     }
@@ -65,11 +66,11 @@ function logout(){
     axios.delete(URL_TOKEN).then(response=>{
        let [flag,data] = checkResponse(response,true)
        if (flag){
-           clearCookies(NICK_NAME)
-           clearCookies(TOKEN)
-           changeUrl(URL_LOGIN)
+           VueCookie.delete(NICK_NAME)
+           VueCookie.delete(TOKEN)
        } else {
            alert(data)
        }
     });
 }
+export  {checkToken,logout,checkResponse,permssion}
