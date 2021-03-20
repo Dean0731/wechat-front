@@ -21,3 +21,6 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+# 改镜像 yarn config set registry https://registry.npm.taobao.org
+# git add . && git commit -m "init" && git push

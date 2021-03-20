@@ -1,8 +1,14 @@
-import Vue from 'vue'
-import App from './App.vue'
+import Vue from 'vue';
+import router from './routers/router.js';
+import App from './App.vue';
+import ViewUI from 'view-design';
+import 'view-design/dist/styles/iview.css';
+import './assets/css/mycss.css';
 
-Vue.config.productionTip = false
 
+Vue.use(ViewUI)
+// eslint-disable-next-line no-unused-vars
 new Vue({
-  render: h => h(App),
-}).$mount('#app')
+  router,
+  render: h => h(App)
+}).$mount("#app")
