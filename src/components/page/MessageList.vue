@@ -55,7 +55,7 @@
   <el-pagination
       background
       style="margin-top: 50px"
-      @current-change="currentChange"
+      @current-change="getMessageList"
       layout="prev, pager, next"
       :total="total">
   </el-pagination>
@@ -65,55 +65,46 @@
 <script>
 import {URL_MESSAGE_COUNT,URL_MESSAGE} from "@/assets/js/const"
 import {checkResponse} from "@/assets/js/function"
+import {urlJoinParam} from "../../assets/js/function";
+import {errorMessage, successMessage} from "../util/messageUtil";
 export default {
-  data(){//定义变量初始值
+  data(){
     return{
       message:[],
       page:1,
-      total:0
+      total:0,
     }
   },
-  created(){//调用定义方法
+  created(){
     this.getMessageList(null)
     this.getTotal()
   },
-  methods:{//编写具体方法
-    // select(key, keyPath) {
-    //   getPages(key,keyPath)
-    // },
-    currentChange(pageNumber){
-      this.getMessageList(pageNumber)
-    },
+  methods:{
     getTotal(){
       this.$axios.get(URL_MESSAGE_COUNT)
-          .then(//请求成功执行
-              response=>{  //箭头函数
-                //response 就是返回的数据
-                let[flag,data]  = checkResponse(response,true)
+          .then(response=>{
+                let[flag,data]  = checkResponse(response,true,this)
                 if(flag){
                   this.total = data;
                 }
               }
           )
-      // .catch(alert("请求失败"))//请求失败
     },
     getMessageList(pageNumber){
       if (pageNumber==null){
         pageNumber=1
       }
-      this.$axios.get(URL_MESSAGE+"?pageNumber="+pageNumber)
-          .then(//请求成功执行
-              response=>{  //箭头函数
-                let [flag,data] = checkResponse(response,true)
-                //response 就是返回的数据
+      this.$axios.get(urlJoinParam(URL_MESSAGE,{"pageNumber":pageNumber,}))
+          .then(response=>{
+                let [flag,data] = checkResponse(response,true,this)
                 if(flag){
                   this.message = data.messageList;
                   this.page = data.page;
                 }
-
               }
-          )
-      // .catch(alert("请求失败"))//请求失败
+          ).catch(res=>{
+        this.$message(errorMessage(res))
+      })
     },
     deleteRow(row){
       var _this = this;
@@ -122,11 +113,11 @@ export default {
         let [flag,data] = checkResponse(res,true)
         if(flag){
           _this.message.splice(row,1);
+          _this.$message(successMessage("delete success"))
         }else{
-          alert(data)
+          _this.$message(errorMessage(data))
         }
       })
-      // console.log(row)
     },
     copyText(row) {
       let Url2 = row.content;  //每一行的某个值，如选中的当前行的url

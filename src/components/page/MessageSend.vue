@@ -10,43 +10,30 @@
 <!--        <el-button @click="">重置</el-button>-->
       </el-form-item>
     </el-form>
-    <el-dialog
-        title="提示"
-        :visible.sync="dialogVisible"
-        width="30%"
-        >
-      <span>{{title}}</span>
-      <span slot="footer" class="dialog-footer">
-            <el-button @click="dialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-          </span>
-    </el-dialog>
   </el-col>
 </template>
 <script>
 import {URL_MESSAGE} from "../../assets/js/const"
 import {checkResponse} from "../../assets/js/function"
+import {errorMessage, successMessage} from "../util/messageUtil";
 export default {
   data () {
     return {
       message:{
         content:''
       },
-      dialogVisible: false,
-      title:"发送完成"
     };
   },
   methods:{
     sendMessage(){
       var data = this.$qs.parse({"content":this.message.content})
       var _this = this;
-      this.$axios.post(URL_MESSAGE,data).then(function (response){
-        let [flag,data] = checkResponse(response,true)
+      this.$axios.post(URL_MESSAGE,data,).then(function (response){
+        let [flag,data] = checkResponse(response,true,_this)
         if(flag){
-          _this.dialogVisible = true;
+          _this.$message(successMessage("send message success!"))
         }else{
-          _this.dialogVisible = true;
-          _this.title = data;
+          _this.$message(errorMessage(data))
         }
       })
     },

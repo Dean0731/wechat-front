@@ -8,13 +8,25 @@ import "@/assets/css/reset.css"
 import axios from "axios";
 import moment from "moment";
 import qs from 'qs'
-Vue.use(VueCookie)   // 挂在在全局
-axios.defaults.baseURL = 'http://localhost:8005/';
-axios.defaults.withCredentials = true
-Vue.prototype.$axios = axios
+import {URL_SERVICE} from "./assets/js/const";
 Vue.prototype.$qs = qs
+Vue.prototype.$token = VueCookie.get("wechat_token");
+axios.defaults.baseURL = URL_SERVICE;
+axios.interceptors.request.use(function (config) {
+  const token = VueCookie.get("wechat_token")
+    config.params = {
+      wechat_token: token,
+      ...config.params
+    }
+  return config;
+}, function (error) {
+  return Promise.reject(error);
+})
+
+Vue.prototype.$axios = axios
+Vue.prototype.$cookies = VueCookie
 Vue.prototype.dateFormat = function(date){
-  return moment.unix(Number(date)).format('YYYY-MM-DD HH:mm:ss');
+  return moment(Number(date)).format('YYYY-MM-DD HH:mm:ss');
 }
 Vue.use(ElementUI);
 

@@ -4,11 +4,17 @@
       <Aside />
     </el-aside>
     <el-container>
-      <el-header>Header</el-header>
+          <el-header style="text-align: right; font-size: 12px;">
+            <el-dropdown  @command="handleCommand">
+              <i class="el-icon-setting" style="margin-right: 15px"></i>
+              <span>{{nickname}} </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="a">注销</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+      </el-header>
       <el-main>
-        <router-view>
-          <DashBoard />
-        </router-view>
+        <router-view></router-view>
       </el-main>
       <el-footer>Footer</el-footer>
     </el-container>
@@ -17,42 +23,42 @@
 
 <script>
 import Aside from "@/components/Aside";
-import DashBoard from "@/components/page/DashBoard";
 import {permssion} from "@/assets/js/function";
+import {logout} from "../assets/js/function";
+import {NICK_NAME} from "../assets/js/const";
 export default {
   name:"Home",
   components:{
-    Aside, DashBoard
+    Aside,
   },
   data(){
     return {
-      clientHeight:null
+      clientHeight:null,
+      nickname:this.$cookies.get(NICK_NAME)
     }
   },
   created() {
     permssion(this)
   },
   mounted(){
-    // 获取浏览器可视区域高度
     this.clientHeight =   `${document.documentElement.clientHeight}`
-    //document.body.clientWidth;
-    //console.log(self.clientHeight);
     window.onresize = function temp() {
       this.clientHeight = `${document.documentElement.clientHeight}`;
     };
   },
   watch: {
-    // 如果 `clientHeight` 发生改变，这个函数就会运行
     clientHeight: function () {
       this.changeFixed(this.clientHeight)
     }
   },
 
   methods:{
-
+    handleCommand(data){
+      if(data=="a"){
+        logout(this)
+      }
+    },
     changeFixed(clientHeight){ //动态修改样式
-      // console.log(clientHeight);
-      // console.log(this.$refs.homePage.$el.style.height);
       this.$refs.homePage.$el.style.height = clientHeight+'px';
     },
   },

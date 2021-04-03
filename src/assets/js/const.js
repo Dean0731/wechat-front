@@ -1,3 +1,4 @@
+export const URL_SERVICE = 'http://localhost:8004/'
 // 两个cookie 的key
 export const TOKEN = "wechat_token";
 export const NICK_NAME = "nickname";

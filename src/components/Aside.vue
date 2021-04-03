@@ -49,7 +49,6 @@
 
 <script>
 import {URL_DASHBOARD, URL_MESSAGE_LIST, URL_MESSAGE_SEND} from "@/assets/js/const";
-
 export default {
   name: "Aside",
   data(){
@@ -64,7 +63,5 @@ export default {
   }
 }
 </script>
-
 <style scoped>
-
 </style>

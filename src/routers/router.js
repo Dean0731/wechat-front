@@ -7,9 +7,10 @@ import Home from "../components/Home"
 import Vue from 'vue';
 import {URL_DASHBOARD, URL_HOME, URL_LOGIN, URL_MESSAGE_LIST, URL_MESSAGE_SEND} from "@/assets/js/const";
 Vue.use(VueRouter);
-
 const routes = [
+    { path:"/",redirect:URL_HOME},
     { path: URL_HOME, component:Home,children:[
+            { path:"/",redirect:URL_DASHBOARD},
             { path: URL_MESSAGE_LIST, component: MESSAGELIST },
             { path: URL_MESSAGE_SEND, component: MESSAGSEND },
             { path: URL_DASHBOARD, component: DASHBOARD },
