@@ -1,19 +1,19 @@
-import {URL_CHECK_TOKEN,URL_TOKEN,NICK_NAME,TOKEN} from "./const"
+import {URL_CHECK_TOKEN, URL_TOKEN, NICK_NAME, TOKEN, URL_LOGIN} from "./const"
 import axios from 'axios';
 import $ from "jquery"
 import VueCookie from 'vue-cookie'
-function checkToken(){
-    let ret = null;
-    $.get({
-        url: URL_CHECK_TOKEN,
-        async: false,
-        success: function(data) {
-            ret = data;
-        }
-    });
-    return ret;
-}
-function getToken(nickanme,password){
+// export function checkToken(){
+//     let ret = null;
+//     $.get({
+//         url: URL_CHECK_TOKEN,
+//         async: false,
+//         success: function(data) {
+//             ret = data;
+//         }
+//     });
+//     return ret;
+// }
+export function getToken(nickanme,password){
     let ret = null;
     $.post({
         url: URL_TOKEN,
@@ -27,10 +27,11 @@ function getToken(nickanme,password){
     return ret;
 }
 
-function permssion(){
+export function permssion(vue){
     let localname = VueCookie.get(NICK_NAME)
     if(localname=="" || localname ==null){
-        console.log("localname=null")
+        vue.$router.push(URL_LOGIN)
+        return;
     }
     let localToken = VueCookie.get(TOKEN)
     if(localToken=="" || localToken== null){
@@ -40,15 +41,15 @@ function permssion(){
             updateCookies(data)
         }else{
             VueCookie.delete(NICK_NAME)
-
+            vue.$router.push(URL_LOGIN)
         }
     }
 }
-function updateCookies(data){
-    VueCookie.set(TOKEN,data.token,{ expires: new Date(data.expireTime) })
+export function updateCookies(data){
+    VueCookie.set(TOKEN,data.token,{ expires :new Date(data.expireTime).toUTCString()})
     VueCookie.set(NICK_NAME,data.userInfo.nickname,{ expires: 30 })
 }
-function checkResponse(res,async){
+export function checkResponse(res,async){
     if(async){
         res= res.data
     }
@@ -58,11 +59,10 @@ function checkResponse(res,async){
         return [true,res.data];
     }else if(errcode=="A0230"){
         VueCookie.delete(TOKEN)
-    }else {
-        return [false,errmsg]
     }
+    return [false,errmsg]
 }
-function logout(){
+export function logout(){
     axios.delete(URL_TOKEN).then(response=>{
        let [flag,data] = checkResponse(response,true)
        if (flag){
@@ -73,4 +73,3 @@ function logout(){
        }
     });
 }
-export  {checkToken,logout,checkResponse,permssion}

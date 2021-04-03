@@ -1,14 +1,7 @@
 <template>
   <div id="app">
-   <HOME/>
+   <router-view/>
   </div>
 </template>
 <script>
-  import HOME from "./components/Home";
-  export default {
-    name: 'app',
-    components: {
-      HOME
-    }
-  }
 </script>

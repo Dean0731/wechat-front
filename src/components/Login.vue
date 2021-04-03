@@ -1,48 +1,160 @@
-<style>
-    .login {
-        width: 400px;
-        margin: 0 auto;
-    }
-</style>
 <template>
-  <div id="app">
-    <div class="login">
-        <div class="ivu-login">
-            <form autocomplete="off" class="ivu-form ivu-form-label-right">
-                <div class="ivu-login-username">
-                    <div class="ivu-form-item ivu-form-item-required"><!---->
-                        <div class="ivu-form-item-content">
-                            <div class="ivu-input-wrapper ivu-input-wrapper-large ivu-input-type-text"><!----> <!---->
-                                <i class="ivu-icon ivu-icon-ios-loading ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                                <input autocomplete="off" spellcheck="false" type="text" placeholder="请输入用户名"
-                                       name="username" class="ivu-input ivu-input-large ivu-input-with-prefix"> <span
-                                        class="ivu-input-prefix"><i
-                                        class="ivu-icon ivu-icon-ios-contact-outline"></i></span></div> <!----></div>
-                    </div>
-                </div>
-                <div class="ivu-login-password">
-                    <div class="ivu-form-item ivu-form-item-required"><!---->
-                        <div class="ivu-form-item-content">
-                            <div class="ivu-input-wrapper ivu-input-wrapper-large ivu-input-type-password"><!---->
-                                <!----> <i
-                                        class="ivu-icon ivu-icon-ios-loading ivu-load-loop ivu-input-icon ivu-input-icon-validate"></i>
-                                <input autocomplete="off" spellcheck="false" type="password" placeholder="请输入密码"
-                                       name="password" class="ivu-input ivu-input-large ivu-input-with-prefix"> <span
-                                        class="ivu-input-prefix"><i
-                                        class="ivu-icon ivu-icon-ios-lock-outline"></i></span></div> <!----></div>
-                    </div>
-                </div>
-                <div class="demo-auto-login"><label
-                        class="ivu-checkbox-wrapper ivu-checkbox-wrapper-checked ivu-checkbox-large"><span
-                        class="ivu-checkbox ivu-checkbox-checked"><span class="ivu-checkbox-inner"></span> <input
-                        type="checkbox" class="ivu-checkbox-input"></span> 自动登录</label> <a>忘记密码</a></div>
-                <div class="ivu-login-submit">
-                    <button type="button" class="ivu-btn ivu-btn-primary ivu-btn-long ivu-btn-large"><!----> <!---->
-                        <span>登录</span></button>
-                </div>
-            </form>
-        </div>
-    </div>
-  </div>
+  <el-container ref="app">
+    <el-main class="main">
+      <!--            <el-row :gutter="20">-->
+      <el-col :span="3" :offset="16">
+        <el-row class="login_box">
+          <!-- 头像 -->
+          <el-row class="avatar_box">
+            <img class="avatar_img" src="/favicon.png" alt="">
+          </el-row>
+          <!-- 表单 -->
+          <el-form ref="LoginFormRef" :model="loginForm" label-width="0" :rules="LoginFormRules" class="login_form">
+            <el-form-item prop="username">
+              <!-- 用户名-->
+              <el-input v-model="loginForm.username" prefix-icon="el-icon-user"></el-input>
+            </el-form-item>
+            <!-- 密码-->
+            <el-form-item prop="password">
+              <el-input v-model="loginForm.password" prefix-icon="el-icon-lock" type="password"></el-input>
+            </el-form-item>
+            <el-form-item class="btns">
+              <el-button type="primary" @click="login"  v-bind:disable="dis">登录</el-button>
+              <el-button type="info" @click="resetLoginForm">重置</el-button>
+            </el-form-item>
+          </el-form>
+        </el-row>
+      </el-col>
+      <!--            </el-row>-->
+    </el-main>
+  </el-container>
 </template>
+<script>
+import {URL_MESSAGE_LIST,URL_TOKEN} from '@/assets/js/const'
+import {checkResponse,updateCookies} from "@/assets/js/function"
+export default {
+  name:"Login",
+    data() {
+      return {
+        clientHeight:null,
+        dis: false,
+        // 登录的初始化数据：备注默认应该是空
+        loginForm:{
+          username:'',
+          password:''
+        },
+        // 正则表达式的相关校验
+        LoginFormRules:{
+          username:[
+            { required: true, message: '请输入用户名', trigger: 'blur' },
+          ],
+          password:[
+            { required: true, message: '请输入密码', trigger: 'blur' },
+          ]
+        }
+      }
+    },
+    mounted(){
+      // 获取浏览器可视区域高度
+      this.clientHeight =   `${document.documentElement.clientHeight}`
+      //document.body.clientWidth;
+      //console.log(self.clientHeight);
+      window.onresize = function temp() {
+        this.clientHeight = `${document.documentElement.clientHeight}`;
+      };
+    },
+    watch: {
+      // 如果 `clientHeight` 发生改变，这个函数就会运行
+      clientHeight: function () {
+        this.changeFixed(this.clientHeight)
+      }
+    },
+    methods: {
+      changeFixed(clientHeight){ //动态修改样式
+        // console.log(clientHeight);
+        // console.log(this.$refs.homePage.$el.style.height);
+        this.$refs.app.$el.style.height = clientHeight+'px';
+      },
+      // 清空表单的校验
+      resetLoginForm() {
+        this.$refs.LoginFormRef.resetFields()
+      },
+      //登录的方法：登录逻辑写里面
+      login() {
+        //首先是校验如果正则的校验通过 -->> 执行数据传输
+        this.$refs['LoginFormRef'].validate(async (valid) => {
+          if (valid) {
+            this.$refs.dis=true;
+            let _this=this
+            let data = this.$qs.stringify({nickname:this.loginForm.username,password:this.loginForm.password})
+            this.$axios.post(URL_TOKEN,data).then(res =>{
+              let [flag,data]  = checkResponse(res,true)
+              console.log(flag,data)
+              if (flag){
+                updateCookies(data)
+                this.$router.push(URL_MESSAGE_LIST)
+              }else{
+                this.$message({
+                  message:data,
+                  type:'error'
+                })
+                _this.$refs.dis=false;
+              }
+            })
+          } else {
+            return false
+          }
+        })
+      }
+    }
+  }
+</script>
 
+<style lang="less" scoped>
+.main{
+  background-image: url('http://localhost:8080/bg.jpg');
+  background-repeat: no-repeat;
+  background-size: cover
+}
+.login_box{
+  width: 450px;
+  height: 300px;
+  background-color: #fff;
+  border-radius: 3px;
+  transform: translate(50%,150%)
+}
+
+.avatar_box{
+  width: 130px;
+  height: 130px;
+  border: 1px solid #eee;
+  border-radius: 50%;
+  padding: 10px;
+  box-shadow: 0 0 10px #ddd;
+  position: absolute;
+  left:50%;
+  transform: translate(-50%,-50%);
+  background-color: #fff;
+  text-align: center;
+  vertical-align: center;
+}
+.avatar_img{
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #eee;
+}
+
+.login_form{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.btns{
+  display: flex;
+  justify-content:flex-end;
+}
+</style>
