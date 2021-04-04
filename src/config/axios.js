@@ -10,5 +10,5 @@ axios.interceptors.request.use(function (config) {
 }, function (error) {
     return Promise.reject(error);
 })
-
+axios.defaults.baseURL=process.env.SERVICE_URL
 export default axios

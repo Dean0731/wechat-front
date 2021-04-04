@@ -15,7 +15,12 @@ Vue.prototype.$axios = axios
 Vue.prototype.$cookies = VueCookie
 
 Vue.prototype.dateFormat = function(date){
-  return moment(Number(date)).format('YYYY-MM-DD HH:mm:ss');
+  if(date.toString().length==13){
+    return moment(Number(date)).format('YYYY-MM-DD HH:mm:ss');
+  }else if(date.toString().length==10) {
+    return moment.unix(Number(date)).format('YYYY-MM-DD HH:mm:ss');
+  }
+  return "time formate error!"
 }
 Vue.use(ElementUI);
 
