@@ -10,5 +10,6 @@ axios.interceptors.request.use(function (config) {
 }, function (error) {
     return Promise.reject(error);
 })
-axios.defaults.baseURL=process.env.SERVICE_URL
+// axios.defaults.baseURL=process.env.SERVICE_URL
+// axios.defaults.baseURL="http://106.15.89.152:8004"
 export default axios
