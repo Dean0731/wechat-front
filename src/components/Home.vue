@@ -23,9 +23,8 @@
 
 <script>
 import Aside from "@/components/Aside";
-import {permssion} from "@/assets/js/function";
-import {logout} from "../assets/js/function";
-import {NICK_NAME} from "../assets/js/const";
+import {logout,permssion} from "../config/function";
+import {NICK_NAME} from "../config/const";
 export default {
   name:"Home",
   components:{

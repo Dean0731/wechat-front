@@ -10,7 +10,7 @@
 
         active-text-color="#ffd04b">
       <el-menu-item style="text-align: center;padding:10px 0px 10px 0px">
-        <el-image src="/favicon.ico"/>
+        <el-image src="//static.dean0731.top/image/source/mylogo-nobg_wechat-front.png" style="width: 40%;"/>
       </el-menu-item>
       <el-submenu index="1">
         <template slot="title">
@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import {URL_DASHBOARD, URL_MESSAGE_LIST, URL_MESSAGE_SEND} from "@/assets/js/const";
+import {URL_DASHBOARD, URL_MESSAGE_LIST, URL_MESSAGE_SEND} from "../routers/path";
 export default {
   name: "Aside",
   data(){

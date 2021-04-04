@@ -30,9 +30,9 @@
   </el-container>
 </template>
 <script>
-import { URL_TOKEN} from '@/assets/js/const'
-import {checkResponse, updateCookies} from "@/assets/js/function"
-import {URL_HOME, URL_MESSAGE_LIST} from "../assets/js/const";
+import { URL_TOKEN} from '../config/const'
+import {checkResponse, updateCookies} from "../config/function"
+import {URL_HOME} from "../routers/path";
 export default {
   name: "Login",
   data() {
@@ -110,7 +110,7 @@ export default {
 
 <style lang="less" scoped>
 .main {
-  background: url("bg.jpg") no-repeat;
+  background: url("https://static.dean0731.top/image/source/bg.jpg") no-repeat;
   background-size: cover
 }
 

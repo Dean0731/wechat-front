@@ -63,9 +63,8 @@
 </template>
 
 <script>
-import {URL_MESSAGE_COUNT,URL_MESSAGE} from "@/assets/js/const"
-import {checkResponse} from "@/assets/js/function"
-import {urlJoinParam} from "../../assets/js/function";
+import {URL_MESSAGE_COUNT,URL_MESSAGE} from "../../config/const"
+import {checkResponse,urlJoinParam} from "../../config/function"
 import {errorMessage, successMessage} from "../util/messageUtil";
 export default {
   data(){

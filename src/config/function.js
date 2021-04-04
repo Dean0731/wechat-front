@@ -1,7 +1,8 @@
-import {URL_TOKEN, NICK_NAME, TOKEN, URL_LOGIN, URL_SERVICE, URL_CHECK_TOKEN} from "./const"
+import {URL_TOKEN, NICK_NAME, TOKEN, URL_CHECK_TOKEN} from "./const"
 import axios from 'axios';
 import $ from "jquery"
 import VueCookie from 'vue-cookie'
+import {URL_LOGIN} from "../routers/path";
 export function checkToken(){
     let ret = null;
     $.get({
@@ -16,7 +17,7 @@ export function checkToken(){
 export function getToken(nickanme,password){
     let ret = null;
     $.post({
-        url: URL_SERVICE+URL_TOKEN,
+        url: process.env.SERVICE_URL+URL_TOKEN,
         data: {"nickname":nickanme,"password":password},
         dataType: "json",
         async: false,
@@ -43,6 +44,9 @@ export function permssion(vue){
             VueCookie.delete(NICK_NAME)
             vue.$router.push(URL_LOGIN)
         }
+    }else{
+        let ret = checkToken();
+        checkResponse(ret,false,vue)
     }
 }
 export function updateCookies(data){
