@@ -1,12 +1,13 @@
 import axios from "axios";
 import VueCookie from 'vue-cookie'
+import {TOKEN} from "./const";
 
 const instance = axios.create({
-    baseURL:"http://wechat.dean0731.top/",
+    baseURL:"https://wechat.dean0731.top/",
 
 });
 instance.interceptors.request.use(function (config) {
-    const token = VueCookie.get("wechat_token")
+    const token = VueCookie.get(TOKEN)
     config.params = {
         wechat_token: token,
         ...config.params

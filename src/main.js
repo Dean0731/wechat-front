@@ -8,9 +8,10 @@ import "@/assets/css/reset.css"
 import moment from "moment";
 import qs from 'qs'
 import axios from "./config/axios"
+import {TOKEN} from "./config/const";
 
 Vue.prototype.$qs = qs
-Vue.prototype.$token = VueCookie.get("wechat_token");
+Vue.prototype.$token = VueCookie.get(TOKEN);
 Vue.prototype.$axios = axios
 Vue.prototype.$cookies = VueCookie
 
