@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import {URL_DASHBOARD, URL_MESSAGE_LIST, URL_MESSAGE_SEND} from "../routers/path";
+import {URL_DASHBOARD, URL_MESSAGE_LIST, URL_MESSAGE_SEND} from "../routers/router";
 export default {
   name: "Aside",
   data(){

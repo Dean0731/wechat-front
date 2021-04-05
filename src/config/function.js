@@ -1,33 +1,7 @@
-import {URL_TOKEN, NICK_NAME, TOKEN, URL_CHECK_TOKEN} from "./const"
-import axios from 'axios';
-import $ from "jquery"
+import {NICK_NAME, TOKEN} from "./const"
 import VueCookie from 'vue-cookie'
-import {URL_LOGIN} from "../routers/path";
-export function checkToken(){
-    let ret = null;
-    $.get({
-        url: URL_CHECK_TOKEN,
-        async: false,
-        success: function(data) {
-            ret = data;
-        }
-    });
-    return ret;
-}
-export function getToken(nickanme,password){
-    let ret = null;
-    $.post({
-        url: process.env.SERVICE_URL+URL_TOKEN,
-        data: {"nickname":nickanme,"password":password},
-        dataType: "json",
-        async: false,
-        success: function(data) {
-            ret = data;
-        }
-    });
-    return ret;
-}
-
+import {checkToken, getToken} from "./service";
+import {URL_LOGIN} from "../routers/router";
 export function permssion(vue){
     let localname = VueCookie.get(NICK_NAME)
     if(localname=="" || localname ==null){
@@ -36,17 +10,10 @@ export function permssion(vue){
     }
     let localToken = VueCookie.get(TOKEN)
     if(localToken=="" || localToken== null){
-        let res = getToken(localname,null)
-        let [flag,data] = checkResponse(res)
-        if(flag){
-            updateCookies(data)
-        }else{
-            VueCookie.delete(NICK_NAME)
-            vue.$router.push(URL_LOGIN)
-        }
+        let data = {"nickname":localname,"password":null}
+        getToken(data,vue)
     }else{
-        let ret = checkToken();
-        checkResponse(ret,false,vue)
+        checkToken(vue);
     }
 }
 export function updateCookies(data){
@@ -68,18 +35,6 @@ export function checkResponse(res,async,vue){
         vue.$router.push(URL_LOGIN)
     }
     return [false,errmsg]
-}
-export function logout(vue){
-    axios.delete(URL_TOKEN).then(response=>{
-       let [flag,data] = checkResponse(response,true)
-       if (flag){
-           VueCookie.delete(NICK_NAME)
-           VueCookie.delete(TOKEN)
-           vue.$router.push(URL_LOGIN)
-       } else {
-           alert(data)
-       }
-    });
 }
 
 export function urlJoinParam(url,params) {

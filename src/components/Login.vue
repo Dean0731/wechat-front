@@ -9,7 +9,12 @@
             <img class="avatar_img" src="/favicon.png" alt="">
           </el-row>
           <!-- 表单 -->
-          <el-form ref="LoginFormRef" :model="loginForm" label-width="0" :rules="LoginFormRules" class="login_form">
+          <el-form ref="LoginFormRef"
+                   :model="loginForm"
+                   label-width="0"
+                   :rules="LoginFormRules"
+                   @keypress.enter.native="login"
+                   class="login_form">
             <el-form-item prop="username">
               <!-- 用户名-->
               <el-input v-model="loginForm.username" prefix-icon="el-icon-user"></el-input>
@@ -30,9 +35,7 @@
   </el-container>
 </template>
 <script>
-import { URL_TOKEN} from '../config/const'
-import {checkResponse, updateCookies} from "../config/function"
-import {URL_HOME} from "../routers/path";
+import {login} from "../config/service";
 export default {
   name: "Login",
   data() {
@@ -81,24 +84,11 @@ export default {
       this.$refs['LoginFormRef'].validate(async (valid) => {
         if (valid) {
           this.$refs.dis = true;
-          let _this = this
           let data = this.$qs.stringify({
             nickname: this.loginForm.username,
             password: this.loginForm.password,
           })
-          this.$axios.post(URL_TOKEN, data,).then(res => {
-            let [flag, data] = checkResponse(res, true)
-            if (flag) {
-              updateCookies(data)
-              this.$router.push(URL_HOME)
-            } else {
-              this.$message({
-                message: data,
-                type: 'error'
-              })
-              _this.$refs.dis = false;
-            }
-          })
+          login(data,this)
         } else {
           return false
         }

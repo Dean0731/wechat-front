@@ -6,8 +6,14 @@ import Login from "../components/Login"
 import Home from "../components/Home"
 import Error404 from "../components/Error404"
 import Vue from 'vue';
-import {URL_DASHBOARD, URL_HOME, URL_LOGIN, URL_MESSAGE_LIST, URL_MESSAGE_SEND} from "./path";
+
 Vue.use(VueRouter);
+export const URL_LOGIN = "/login"
+export const URL_HOME = "/home"
+export const URL_DASHBOARD = "/home/dashboard"
+export const URL_MESSAGE_LIST = "/home/message/list"
+export const URL_MESSAGE_SEND = '/home/message/send'
+
 const routes = [
     { path:"/",redirect:URL_HOME},
     { path: URL_HOME, component:Home,children:[
@@ -21,7 +27,6 @@ const routes = [
     { path: URL_LOGIN, component: Login },
     {path:'*',component:Error404},
 ]
-
 export default new VueRouter({
     routes // (缩写) 相当于 routes: routes
 })

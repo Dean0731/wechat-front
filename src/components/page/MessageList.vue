@@ -63,9 +63,7 @@
 </template>
 
 <script>
-import {URL_MESSAGE_COUNT,URL_MESSAGE} from "../../config/const"
-import {checkResponse,urlJoinParam} from "../../config/function"
-import {errorMessage, successMessage} from "../util/messageUtil";
+import {deleteMessage, getMessage, getMessageTotal} from "../../config/service";
 export default {
   data(){
     return{
@@ -75,48 +73,16 @@ export default {
     }
   },
   created(){
-    this.getMessageList(null)
-    this.getTotal()
+    getMessage(1,this)
+    getMessageTotal(this)
   },
   methods:{
-    getTotal(){
-      this.$axios.get(URL_MESSAGE_COUNT)
-          .then(response=>{
-                let[flag,data]  = checkResponse(response,true,this)
-                if(flag){
-                  this.total = data;
-                }
-              }
-          )
-    },
     getMessageList(pageNumber){
-      if (pageNumber==null){
-        pageNumber=1
-      }
-      this.$axios.get(urlJoinParam(URL_MESSAGE,{"pageNumber":pageNumber,}))
-          .then(response=>{
-                let [flag,data] = checkResponse(response,true,this)
-                if(flag){
-                  this.message = data.messageList;
-                  this.page = data.page;
-                }
-              }
-          ).catch(res=>{
-        this.$message(errorMessage(res))
-      })
+      getMessage(pageNumber,this)
     },
     deleteRow(row){
-      var _this = this;
-      var body = {params: {"msgId":this.message[row].msgId}}
-      this.$axios.delete(URL_MESSAGE,body).then(res=>{
-        let [flag,data] = checkResponse(res,true)
-        if(flag){
-          _this.message.splice(row,1);
-          _this.$message(successMessage("delete success"))
-        }else{
-          _this.$message(errorMessage(data))
-        }
-      })
+      var data = {params: {"msgId":this.message[row].msgId}}
+      deleteMessage(row,data,this)
     },
     copyText(row) {
       let Url2 = row.content;  //每一行的某个值，如选中的当前行的url

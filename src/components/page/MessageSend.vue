@@ -13,9 +13,7 @@
   </el-col>
 </template>
 <script>
-import {URL_MESSAGE} from "../../config/const"
-import {checkResponse} from "../../config/function"
-import {errorMessage, successMessage} from "../util/messageUtil";
+import {sendMessage} from "../../config/service";
 export default {
   data () {
     return {
@@ -27,15 +25,7 @@ export default {
   methods:{
     sendMessage(){
       var data = this.$qs.parse({"content":this.message.content})
-      var _this = this;
-      this.$axios.post(URL_MESSAGE,data,).then(function (response){
-        let [flag,data] = checkResponse(response,true,_this)
-        if(flag){
-          _this.$message(successMessage("send message success!"))
-        }else{
-          _this.$message(errorMessage(data))
-        }
-      })
+      sendMessage(data,this)
     },
   }
 }
