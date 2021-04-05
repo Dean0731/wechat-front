@@ -3,7 +3,7 @@ import VueCookie from 'vue-cookie'
 import {TOKEN} from "./const";
 
 const instance = axios.create({
-    baseURL:"https://wechat.dean0731.top/",
+    baseURL:"http://106.15.89.152/",
 
 });
 instance.interceptors.request.use(function (config) {

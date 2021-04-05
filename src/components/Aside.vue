@@ -2,12 +2,11 @@
   <el-row class="tac">
   <el-col>
     <el-menu
-        default-active="2"
+        default-active="1"
         class="el-menu-vertical-demo"
         background-color="#304156"
         text-color="#fff"
         :router="isRouter"
-
         active-text-color="#ffd04b">
       <el-menu-item style="text-align: center;padding:10px 0px 10px 0px">
         <el-image src="//static.dean0731.top/image/source/mylogo-nobg_wechat-front.png" style="width: 40%;"/>
