@@ -1,31 +1,43 @@
-import Vue from 'vue';
-import router from './routers/router.js';
-import App from './App.vue';
-import VueCookie from 'vue-cookie'
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
-import "@/assets/css/reset.css"
-import moment from "moment";
-import qs from 'qs'
-import axios from "./config/axios"
-import {TOKEN} from "./config/const";
+import Vue from 'vue'
 
-Vue.prototype.$qs = qs
-Vue.prototype.$token = VueCookie.get(TOKEN);
-Vue.prototype.$axios = axios
-Vue.prototype.$cookies = VueCookie
+import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 
-Vue.prototype.dateFormat = function(date){
-  if(date.toString().length==13){
-    return moment(Number(date)).format('YYYY-MM-DD HH:mm:ss');
-  }else if(date.toString().length==10) {
-    return moment.unix(Number(date)).format('YYYY-MM-DD HH:mm:ss');
-  }
-  return "time formate error!"
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+import locale from 'element-ui/lib/locale/lang/en' // lang i18n
+
+import '@/styles/index.scss' // global css
+
+import App from './App'
+import store from './store'
+import router from './router'
+
+import '@/icons' // icon
+import '@/permission' // permission control
+
+/**
+ * If you don't want to use mock-server
+ * you want to use MockJs for mock api
+ * you can execute: mockXHR()
+ *
+ * Currently MockJs will be used in the production environment,
+ * please remove it before going online ! ! !
+ */
+if (process.env.NODE_ENV === 'production') {
+  const { mockXHR } = require('../mock')
+  mockXHR()
 }
-Vue.use(ElementUI);
+
+// set ElementUI lang to EN
+Vue.use(ElementUI, { locale })
+// 如果想要中文版 element-ui，按如下方式声明
+// Vue.use(ElementUI)
+
+Vue.config.productionTip = false
 
 new Vue({
+  el: '#app',
   router,
+  store,
   render: h => h(App)
-}).$mount("#app")
+})
