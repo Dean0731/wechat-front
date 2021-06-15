@@ -78,14 +78,23 @@ export const constantRoutes = [
   },
 
   {
-    path: '/form',
+    path: '/source',
     component: Layout,
+    redirect: '/source/index',
+    name: 'Source',
+    meta: { title: 'Source', icon: 'el-icon-s-help' },
     children: [
       {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
+        path: 'select',
+        name: 'showSource',
+        component: () => import('@/views/source/index'),
+        meta: { title: 'showSource', icon: 'el-icon-files' }
+      },
+      {
+        path: 'setting',
+        name: 'showSetting',
+        component: () => import('@/views/source/setting'),
+        meta: { title: 'setting', icon: 'el-icon-setting' }
       }
     ]
   },
@@ -154,8 +163,8 @@ export const constantRoutes = [
     component: Layout,
     children: [
       {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
+        path: 'https://blog.dean0731.top',
+        meta: { title: 'My blog', icon: 'link' }
       }
     ]
   },

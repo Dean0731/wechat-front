@@ -34,7 +34,16 @@ Vue.use(ElementUI, { locale })
 // Vue.use(ElementUI)
 
 Vue.config.productionTip = false
-
+Vue.filter('ellipsis', function(value, length) {
+  if (length == null) {
+    length = 50
+  }
+  if (!value) return ''
+  if (value.length > length) {
+    return value.slice(0, length) + '...'
+  }
+  return value
+})
 new Vue({
   el: '#app',
   router,

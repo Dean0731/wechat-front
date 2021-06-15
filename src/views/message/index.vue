@@ -59,13 +59,6 @@ import Pagination from '@/components/Pagination'
 export default {
   components: { Pagination },
   filters: {
-    ellipsis(value) {
-      if (!value) return ''
-      if (value.length > 50) {
-        return value.slice(0, 50) + '...'
-      }
-      return value
-    },
     parseTime(value) {
       return parseTime(Number(value))
     }

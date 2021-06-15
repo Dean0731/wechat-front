@@ -1,6 +1,7 @@
 <template>
   <div class="dashboard-container">
     <div class="dashboard-text">name: {{ name }}</div>
+    待完善功能:首页显示最新消息，消息综述
   </div>
 </template>
 

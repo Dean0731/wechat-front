@@ -42,12 +42,6 @@
       </el-form-item>
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
-
-      <div class="tips">
-        <span style="margin-right:20px;">username: admin</span>
-        <span> password: 123456</span>
-      </div>
-
     </el-form>
   </div>
 </template>
@@ -74,8 +68,8 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '123456'
+        username: '',
+        password: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -141,6 +135,7 @@ $cursor: #fff;
 
 /* reset element-ui css */
 .login-container {
+   //background: url("https://static.dean0731.top/image/source/bg.jpg") no-repeat;
   .el-input {
     display: inline-block;
     height: 47px;
