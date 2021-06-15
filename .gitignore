@@ -17,3 +17,4 @@ tests/**/coverage/
 
 
 # git add . && git commit -m "update" && git push
+# git push --set-upstream origin dev
