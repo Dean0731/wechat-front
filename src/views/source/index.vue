@@ -1,7 +1,8 @@
 <template>
   <div class="app-container">
-    <div class="filter-container">
+    <div class="filter-container" style="margin-bottom: 10px">
       <el-input v-model="listQuery.title" placeholder="Title" style="width: 200px;margin-right: 10px" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.tag" placeholder="Tag" style="width: 200px;margin-right: 10px" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         Search
       </el-button>
@@ -31,15 +32,17 @@
       </el-table-column>
       <el-table-column label="Tag" width="350px" align="center">
         <template slot-scope="{row}">
-          <el-tag
-            v-for="item in row.tag"
-            :key="item.name"
-            :type="item.type"
-            effect="dark"
-            style="margin: 0px 2px 0px 0px"
-          >
-            {{ item.name }}
-          </el-tag>
+          <div v-if="row.tag !== null">
+            <el-tag
+              v-for="item in row.tag.split(',')"
+              :key="item"
+              :type="type[Math.floor(Math.random()*5)]"
+              effect="dark"
+              style="margin-left: 2px"
+            >
+              {{ item }}
+            </el-tag>
+          </div>
         </template>
       </el-table-column>
       <el-table-column label="URL" width="350px" align="center">
@@ -81,10 +84,10 @@
           <el-input v-model="temp.url" />
         </el-form-item>
         <el-form-item label="Tag" prop="tag">
-          <el-input v-model="temp.tag" />
+          <el-input v-model="temp.tag" placeholder="','分割" />
         </el-form-item>
         <el-form-item label="Date" prop="timestamp">
-          <el-date-picker v-model="temp.time" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="Please pick a date" />
+          <el-date-picker v-model="temp.time" type="datetime" :default-value="time" value-format="yyyy-MM-dd HH:mm:ss" placeholder="Please pick a date" />
         </el-form-item>
 
       </el-form>
@@ -106,7 +109,7 @@ import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import clip from '@/utils/clipboard' // use clipboard directly
 import clipboard from '@/directive/clipboard/index.js'
-import { changeTagList } from '@/utils/myutil'
+import { type } from '@/utils/myutil'
 export default {
   name: 'ComplexTable',
   components: { Pagination },
@@ -114,13 +117,15 @@ export default {
   filters: {},
   data() {
     return {
+      time: new Date(),
+      type,
       tableKey: 0,
       list: null,
       total: 0,
       listLoading: true,
       listQuery: {
         current: 1,
-        size: 20,
+        size: 10,
         title: undefined,
         tag: undefined
       },
@@ -137,8 +142,7 @@ export default {
       textMap: {
         update: 'Edit',
         create: 'Create'
-      },
-      dialogPvVisible: false
+      }
     }
   },
   created() {
@@ -158,7 +162,7 @@ export default {
     getList() {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
-        this.list = changeTagList(response.data.records)
+        this.list = response.data.records
         this.total = response.data.total
 
         // Just to simulate the time of the request
