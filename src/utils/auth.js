@@ -7,10 +7,12 @@ export function getToken() {
 }
 
 export function setToken(token, time) {
+  console.log(token, time)
   if (time == null) {
     return Cookies.set(TokenKey, token)
   } else {
-    return Cookies.set(TokenKey, token, { expires: new Date(time).toUTCString() })
+    return Cookies.set(TokenKey, token)
+    // return Cookies.set(TokenKey, token, { expires: new Date(time).toUTCString() })
   }
 }
 
