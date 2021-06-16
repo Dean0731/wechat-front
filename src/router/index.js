@@ -62,7 +62,7 @@ export const constantRoutes = [
   {
     path: '/message',
     component: Layout,
-    redirect: '/message/table',
+    redirect: '/message/select',
     name: 'Message',
     meta: { title: 'Message', icon: 'el-icon-s-help' },
     children: [
@@ -84,7 +84,7 @@ export const constantRoutes = [
   {
     path: '/source',
     component: Layout,
-    redirect: '/source/index',
+    redirect: '/source/select',
     name: 'Source',
     meta: { title: 'Source', icon: 'el-icon-s-help' },
     children: [
