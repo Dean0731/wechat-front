@@ -33,7 +33,7 @@
           <span>{{ row.title }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Tag" align="center">
+      <el-table-column label="Tag" width="350" align="center">
         <template slot-scope="{row}">
           <div v-if="row.tag !== null">
             <el-tag
@@ -48,12 +48,12 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="URL" align="center">
+      <el-table-column label="URL" width="400" align="center">
         <template slot-scope="{row}">
           {{ row.url }}
         </template>
       </el-table-column>
-      <el-table-column label="Date" align="center" width="200">
+      <el-table-column label="Date" align="center">
         <template slot-scope="{row}">
           <span>{{ row.time }}</span>
         </template>

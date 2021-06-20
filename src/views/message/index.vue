@@ -8,7 +8,7 @@
       fit
       highlight-current-row
     >
-      <el-table-column align="center" label="ID" width="95">
+      <el-table-column align="center" label="ID" width="80">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
         </template>
@@ -18,7 +18,7 @@
           {{ scope.row.msgType }}
         </template>
       </el-table-column>
-      <el-table-column label="Content" width="500" align="center">
+      <el-table-column label="Content" width="500" align="left">
         <template slot-scope="scope">
           <span>{{ scope.row.content }}</span>
         </template>
@@ -28,7 +28,7 @@
           <el-link type="primary" :underline="false" :href="scope.row.picUrl" target="_blank">{{ scope.row.picUrl | ellipsis }}</el-link>
         </template>
       </el-table-column>
-      <el-table-column label="Time" align="center">
+      <el-table-column label="Time" width="200" align="center">
         <template slot-scope="scope">
           {{ scope.row.createTime | parseTime }}
         </template>

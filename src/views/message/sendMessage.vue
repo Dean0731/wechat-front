@@ -5,25 +5,19 @@
       <el-form-item label="内容">
         <el-upload
           ref="upload"
+          action="#"
           class="upload-demo"
           :limit="1"
-          name="smfile"
-          action="https://sm.ms/api/v2/upload"
-          :on-preview="handlePreview"
-          :on-remove="handleRemove"
-          :on-success="handleSuccess"
           :file-list="fileList"
+          :on-change="addFile"
           :auto-upload="false"
-          :headers="headers"
-          :with-credentials="true"
         >
           <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
           <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
         </el-upload>
       </el-form-item>
       <el-form-item label="内容">
-        <el-input v-model="temp.content" type="textarea" autocomplete="off" />
+        <el-input v-model="temp.content" :rows="10" type="textarea" autocomplete="off" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="createData()">提交</el-button>
@@ -34,28 +28,72 @@
 </template>
 <script>
 import { createMessage } from '@/api/message'
+import axios from 'axios'
 
 export default {
   data() {
     return {
       fileList: [],
-      headers: { 'Content-Type': 'multipart/source-data', 'Authorization': 'obtZ7JN2uDrm1IaL4zAZYSY845PpwAIS' },
+      filename: null,
+      fileBase64: null,
       temp: {
         content: ''
       }
     }
   },
   methods: {
+    addFile(file, fileList) {
+      this.getBase64(file.raw).then(res => {
+        const file_name = file.name.split('.')
+        if (file_name.length === 1) {
+          this.filename = this.guid()
+        } else {
+          this.filename = this.guid() + '.' + file_name[1]
+        }
+        this.fileBase64 = res.split(';')[1].split(',')[1]
+      })
+    },
     submitUpload() {
-      this.$refs.upload.submit()
+      const loading = this.$loading({
+        lock: true,
+        text: '正在上传',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+      const url = 'https://api.github.com/repos/dean0731/File/contents/wechat/' + this.filename
+      const headers = { 'Content-Type': 'application/json', 'Authorization': 'token 88647d429dbc219cd920e560d15cfa67469f9e39' }
+      const data = { message: 'wechat_tmep提交', content: this.fileBase64 }
+      axios.put(url, data, { headers: headers }).then(res => {
+        loading.close()
+        this.temp.content = '文件:https://cdn.jsdelivr.net/gh/Dean0731/File@main/wechat/' + this.filename + '\n' + this.temp.content
+        this.$message.success('upload success!')
+      }).catch(err => {
+        loading.close()
+        console.log(err)
+        this.$message.success('upload failed,maybe file formate does not support ')
+      })
     },
-    handleRemove(file, fileList) {
-      console.log(file, fileList)
+    getBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        let fileResult = ''
+        reader.readAsDataURL(file)
+        reader.onload = function() {
+          fileResult = reader.result
+        }
+        reader.onerror = function(error) {
+          reject(error)
+        }
+        reader.onloadend = function() {
+          resolve(fileResult)
+        }
+      })
     },
-    handlePreview(file) {
-      console.log(file)
-    },
-    handleSuccess() {
+    guid() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0; const v = c === 'x' ? r : (r & 0x3 | 0x8)
+        return v.toString(16)
+      })
     },
     createData() {
       createMessage(this.temp).then(() => {
