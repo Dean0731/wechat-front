@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container" align="center">
+  <div class="app-container">
     <h2>消息推送</h2>
     <el-form v-model="temp" status-icon label-position="left" label-width="70px" style="width: 800px; margin-left:50px;" class="demo-ruleForm">
       <el-form-item label="内容">
@@ -24,13 +24,18 @@
         <!--        <el-button @click="">重置</el-button>-->
       </el-form-item>
     </el-form>
+    <json-viewer :value="uploadData" :expand-depth="4" copyable sort />
   </div>
 </template>
 <script>
 import { createMessage } from '@/api/message'
+import JsonViewer from 'vue-json-viewer'
 import axios from 'axios'
 
 export default {
+  components: {
+    JsonViewer
+  },
   data() {
     return {
       fileList: [],
@@ -38,7 +43,8 @@ export default {
       fileBase64: null,
       temp: {
         content: ''
-      }
+      },
+      uploadData: null
     }
   },
   methods: {
@@ -61,12 +67,13 @@ export default {
         background: 'rgba(0, 0, 0, 0.7)'
       })
       const url = 'https://api.github.com/repos/dean0731/File/contents/wechat/' + this.filename
-      const headers = { 'Content-Type': 'application/json', 'Authorization': 'token 88647d429dbc219cd920e560d15cfa67469f9e39' }
+      const headers = { 'Content-Type': 'application/json', 'Authorization': 'token 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' }
       const data = { message: 'wechat_tmep提交', content: this.fileBase64 }
       axios.put(url, data, { headers: headers }).then(res => {
         loading.close()
         this.temp.content = '文件:https://cdn.jsdelivr.net/gh/Dean0731/File@main/wechat/' + this.filename + '\n' + this.temp.content
         this.$message.success('upload success!')
+        this.uploadData = res.data
       }).catch(err => {
         loading.close()
         console.log(err)

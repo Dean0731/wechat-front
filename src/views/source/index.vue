@@ -25,12 +25,12 @@
           <span>{{ $index+1+listQuery.size*(listQuery.current-1) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Title" width="500px">
+      <el-table-column label="Title">
         <template slot-scope="{row}">
           <span>{{ row.title }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Tag" width="350px" align="center">
+      <el-table-column label="Tag" align="center">
         <template slot-scope="{row}">
           <div v-if="row.tag !== null">
             <el-tag
@@ -45,12 +45,12 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="URL" width="350px" align="center">
+      <el-table-column label="URL" align="center">
         <template slot-scope="{row}">
           <el-link v-clipboard:copy="row.url" v-clipboard:success="clipboardSuccess">{{ row.url | ellipsis(30) }}</el-link>
         </template>
       </el-table-column>
-      <el-table-column label="Date" width="160px" align="center">
+      <el-table-column label="Date" align="center">
         <template slot-scope="{row}">
           <span>{{ row.time }}</span>
         </template>

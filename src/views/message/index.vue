@@ -18,17 +18,17 @@
           {{ scope.row.msgType }}
         </template>
       </el-table-column>
-      <el-table-column label="Content" width="500" align="left">
+      <el-table-column label="Content" align="left">
         <template slot-scope="scope">
           <span>{{ scope.row.content }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Url" width="500" align="center">
+      <el-table-column label="Url" align="center">
         <template slot-scope="scope">
           <el-link type="primary" :underline="false" :href="scope.row.picUrl" target="_blank">{{ scope.row.picUrl | ellipsis }}</el-link>
         </template>
       </el-table-column>
-      <el-table-column label="Time" width="200" align="center">
+      <el-table-column label="Time" align="center">
         <template slot-scope="scope">
           {{ scope.row.createTime | parseTime }}
         </template>

@@ -10,7 +10,7 @@
       </el-col>
       <el-col :span="1" :offset="16">
         <el-link v-if="name!==''" href="/#/dashboard">{{ name }}</el-link>
-        <el-link v-else href="/#/login">Login</el-link>
+        <el-link v-else @click="gohome()">Login</el-link>
       </el-col>
     </el-row>
     <hr>
@@ -28,12 +28,12 @@
           <span>{{ $index+1+listQuery.size*(listQuery.current-1) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Title" width="400">
+      <el-table-column label="Title">
         <template slot-scope="{row}">
           <span>{{ row.title }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Tag" width="350" align="center">
+      <el-table-column label="Tag" align="center">
         <template slot-scope="{row}">
           <div v-if="row.tag !== null">
             <el-tag
@@ -48,7 +48,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="URL" width="400" align="center">
+      <el-table-column label="URL" align="center">
         <template slot-scope="{row}">
           {{ row.url }}
         </template>
@@ -113,6 +113,9 @@ export default {
     handleFilter() {
       this.listQuery.current = 1
       this.getList()
+    },
+    gohome() {
+      this.$route.push('/dashboard')
     }
   }
 }
