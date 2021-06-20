@@ -31,6 +31,7 @@
 import { createMessage } from '@/api/message'
 import JsonViewer from 'vue-json-viewer'
 import axios from 'axios'
+import { fetchList } from '@/api/option'
 
 export default {
   components: {
@@ -38,14 +39,22 @@ export default {
   },
   data() {
     return {
+      uploadToken: null,
       fileList: [],
       filename: null,
       fileBase64: null,
       temp: {
         content: ''
       },
-      uploadData: null
+      uploadData: {}
     }
+  },
+  created() {
+    fetchList({ name: 'uploadtoken' }).then(res => {
+      if (res.data.records.length === 1) {
+        this.uploadToken = res.data.records[0].val
+      }
+    })
   },
   methods: {
     addFile(file, fileList) {
@@ -60,6 +69,10 @@ export default {
       })
     },
     submitUpload() {
+      if (this.uploadToken === null) {
+        this.$message.warning('现在禁止发送文件')
+        return
+      }
       const loading = this.$loading({
         lock: true,
         text: '正在上传',
@@ -67,7 +80,7 @@ export default {
         background: 'rgba(0, 0, 0, 0.7)'
       })
       const url = 'https://api.github.com/repos/dean0731/File/contents/wechat/' + this.filename
-      const headers = { 'Content-Type': 'application/json', 'Authorization': 'token ' + window.wechat.uploadToken }
+      const headers = { 'Content-Type': 'application/json', 'Authorization': 'token ' + this.uploadToken }
       const data = { message: 'wechat_tmep提交', content: this.fileBase64 }
       axios.put(url, data, { headers: headers }).then(res => {
         loading.close()
