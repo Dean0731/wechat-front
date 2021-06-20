@@ -67,7 +67,7 @@ export default {
         background: 'rgba(0, 0, 0, 0.7)'
       })
       const url = 'https://api.github.com/repos/dean0731/File/contents/wechat/' + this.filename
-      const headers = { 'Content-Type': 'application/json', 'Authorization': 'token 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' }
+      const headers = { 'Content-Type': 'application/json', 'Authorization': 'token ' + window.wechat.uploadToken }
       const data = { message: 'wechat_tmep提交', content: this.fileBase64 }
       axios.put(url, data, { headers: headers }).then(res => {
         loading.close()
