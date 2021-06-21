@@ -1,41 +1,37 @@
 import request from '@/utils/request'
-export function getSetting() {
+
+export function fetchSite(id) {
   return request({
-    url: '/api/opt/all',
-    method: 'get'
-  })
-}
-export function fetchOpt(id) {
-  return request({
-    url: '/api/opt/' + id,
+    url: '/api/site/' + id,
     method: 'get'
     // params: { id }
   })
 }
+
 export function fetchList(params) {
   return request({
-    url: '/api/opt',
+    url: '/api/site',
     method: 'get',
     params
   })
 }
-export function deleteOpt(idList) {
+export function deleteSite(idList) {
   return request({
-    url: '/api/opt',
+    url: '/api/site',
     method: 'delete',
     params: { idList }
   })
 }
-export function createOpt(data) {
+export function createSite(data) {
   return request({
-    url: '/api/opt',
+    url: '/api/site',
     method: 'post',
     data
   })
 }
-export function updateOpt(data) {
+export function updateSite(data) {
   return request({
-    url: '/api/opt',
+    url: '/api/site',
     method: 'put',
     data
   })

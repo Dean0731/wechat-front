@@ -13,7 +13,7 @@ import Layout from '@/layout'
  * hidden: true                   if set true, item will not show in the sidebar(default is false)
  * alwaysShow: true               if set true, will always show the root menu
  *                                if not set alwaysShow, when item has more than one children route,
- *                                it will becomes other mode, otherwise not show the root menu
+ *                                it will becomes index mode, otherwise not show the root menu
  * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb
  * name:'router-name'             the name is used by <keep-alive> (must set!!!)
  * meta : {
@@ -31,7 +31,11 @@ import Layout from '@/layout'
  * all roles can be accessed
  */
 export const constantRoutes = [
-
+  {
+    path: '/',
+    component: () => import('@/views/index/index'),
+    hidden: true
+  },
   {
     path: '/login',
     component: () => import('@/views/login/index'),
@@ -39,7 +43,7 @@ export const constantRoutes = [
   },
   {
     path: '/search',
-    component: () => import('@/views/other/search'),
+    component: () => import('@/views/index/search'),
     hidden: true
   },
   {
@@ -64,7 +68,7 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/message/select',
     name: 'Message',
-    meta: { title: 'Message', icon: 'el-icon-s-help' },
+    meta: { title: 'Message', icon: 'message' },
     children: [
       {
         path: 'select',
@@ -86,40 +90,70 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/source/select',
     name: 'Source',
-    meta: { title: 'Source', icon: 'el-icon-s-help' },
+    meta: { title: 'Source', icon: 'file' },
     children: [
       {
         path: 'select',
         name: 'showSource',
         component: () => import('@/views/source/index'),
-        meta: { title: 'showSource', icon: 'el-icon-files' }
+        meta: { title: 'showSource', icon: 'resource' }
+      }
+    ]
+  },
+  {
+    path: '/site',
+    component: Layout,
+    redirect: '/site/select',
+    name: 'Site',
+    meta: { title: 'Site', icon: 'url-admin' },
+    children: [
+      {
+        path: 'select',
+        name: 'showSite',
+        component: () => import('@/views/site/index'),
+        meta: { title: 'showSite', icon: 'URL' }
+      },
+      {
+        path: 'edit',
+        name: 'editSite',
+        component: () => import('@/views/site/createOrUpdate'),
+        meta: { title: 'editSite', icon: 'el-icon-edit-outline' }
+      }
+    ]
+  },
+  {
+    path: '/opt',
+    component: Layout,
+    redirect: '/opt/select',
+    name: 'opt',
+    meta: { title: 'opt', icon: 'el-icon-setting' },
+    children: [
+      {
+        path: 'select',
+        name: 'showopt',
+        component: () => import('@/views/opt/index'),
+        meta: { title: 'showopt', icon: 'el-icon-files' }
+      },
+      {
+        path: 'edit',
+        name: 'editOpt',
+        component: () => import('@/views/opt/createOrUpdate'),
+        meta: { title: 'editOption', icon: 'el-icon-edit-outline' }
       },
       {
         path: 'setting',
         name: 'showSetting',
-        component: () => import('@/views/source/setting'),
-        meta: { title: 'setting', icon: 'el-icon-setting' }
+        component: () => import('@/views/opt/setting'),
+        meta: { title: 'setting', icon: 'properties' }
       }
     ]
   },
-
-  {
-    path: 'external-link',
-    component: Layout,
-    children: [
-      {
-        path: 'https://blog.dean0731.top',
-        meta: { title: 'My blog', icon: 'link' }
-      }
-    ]
-  },
-
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
 
 const createRouter = () => new Router({
-  // mode: 'history', // require service support
+  mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes
 })

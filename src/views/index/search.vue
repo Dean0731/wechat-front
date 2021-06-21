@@ -9,7 +9,7 @@
         </el-input>
       </el-col>
       <el-col :span="1" :offset="16">
-        <el-link v-if="name!==''" href="/#/dashboard">{{ name }}</el-link>
+        <el-link v-if="name!==''" @click="gohome">{{ name }}</el-link>
         <el-link v-else @click="gohome()">Login</el-link>
       </el-col>
     </el-row>
@@ -115,7 +115,7 @@ export default {
       this.getList()
     },
     gohome() {
-      this.$route.push('/dashboard')
+      this.$router.push('/dashboard')
     }
   }
 }
