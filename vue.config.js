@@ -35,6 +35,16 @@ module.exports = {
     overlay: {
       warnings: false,
       errors: true
+    },
+    proxy: {
+      '/api': {
+        target: process.env.VUE_APP_URL,
+        changeOrigin: true, // 是否改变域名
+        ws: true,
+        // pathRewrite: {
+        //   '^/api': '/' // 这个意思就是以api开头的，定向到哪里, 如果你的后边还有路径的话， 会自动拼接上
+        // }
+      }
     }
     // before: require('./mock/mock-server.js')
   },
