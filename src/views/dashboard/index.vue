@@ -46,8 +46,9 @@ export default {
       if (type === 'messages') {
         this.obj.name = 'lastest message'
         this.obj.item['message'] = obj.lastest.content
-        this.obj.item['url'] = obj.lastest.url
+        this.obj.item['url'] = obj.lastest.picUrl
         this.obj.item['type'] = obj.lastest.msgType
+        console.log(obj)
       } else {
         this.visible = !this.visible
       }
