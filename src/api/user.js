@@ -8,15 +8,6 @@ export function login(data) {
     data
   })
 }
-
-export function getInfo(token) {
-  return request({
-    url: '/api/userinfo/info',
-    method: 'get',
-    params: { token }
-  })
-}
-
 export function logout() {
   return request({
     url: '/api/token',

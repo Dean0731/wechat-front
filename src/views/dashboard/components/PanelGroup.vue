@@ -27,7 +27,7 @@
       </div>
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('purchases')">
+      <div class="card-panel" @click="handleSetLineChartData('userinfo')">
         <div class="card-panel-icon-wrapper icon-money">
           <svg-icon icon-class="peoples" class-name="card-panel-icon" />
         </div>
@@ -35,20 +35,20 @@
           <div class="card-panel-text">
             Users
           </div>
-          <count-to :start-val="0" :end-val="9280" :duration="3200" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="user.toatl" :duration="3200" class="card-panel-num" />
         </div>
       </div>
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('shoppings')">
+      <div class="card-panel" @click="handleSetLineChartData('site')">
         <div class="card-panel-icon-wrapper icon-shopping">
-          <svg-icon icon-class="shopping" class-name="card-panel-icon" />
+          <svg-icon icon-class="site" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
             Other
           </div>
-          <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="site.total" :duration="3600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -59,6 +59,8 @@
 import CountTo from 'vue-count-to'
 import { getList } from '@/api/message'
 import { fetchList } from '@/api/source'
+import { fetchList as fetchSiteList } from '@/api/site'
+import { countUserInfo } from '@/api/userinfo'
 
 export default {
   components: {
@@ -76,6 +78,9 @@ export default {
       },
       user: {
         toatl: undefined
+      },
+      site: {
+        total: undefined
       }
     }
   },
@@ -90,6 +95,12 @@ export default {
       })
       fetchList().then(response => {
         this.source.toatl = response.data.total
+      })
+      fetchSiteList().then(response => {
+        this.site.total = response.data.total
+      })
+      countUserInfo(1).then(response => {
+        this.user.toatl = response.data
       })
     },
     handleSetLineChartData(type, obj) {
