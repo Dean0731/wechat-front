@@ -72,15 +72,12 @@ export default {
     }
   },
   created() {
-    this.fetchData()
+    this.getList()
   },
   methods: {
     getList() {
-      return getList(this.listQuery)
-    },
-    fetchData() {
       this.listLoading = true
-      this.getList().then(response => {
+      getList(this.listQuery).then(response => {
         this.list = response.data.records
         this.total = response.data.total
         this.listQuery.page = response.data.current
