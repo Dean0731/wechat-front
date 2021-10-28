@@ -4,16 +4,17 @@
     <el-form v-model="temp" status-icon label-position="left" label-width="70px" style="width: 800px; margin-left:50px;" class="demo-ruleForm">
       <el-form-item label="内容">
         <el-upload
-          ref="upload"
-          action="#"
           class="upload-demo"
-          :limit="1"
+          :limit="2"
+          name="FilePicture"
+          :action="url"
+          :on-exceed="onExceed"
+          :on-success="onSuccess"
+          :before-upload="onBefore"
           :file-list="fileList"
-          :on-change="addFile"
-          :auto-upload="false"
         >
-          <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-          <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+          <el-button size="small" type="primary">点击上传</el-button>
+          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过10MB</div>
         </el-upload>
       </el-form-item>
       <el-form-item label="内容">
@@ -24,98 +25,71 @@
         <!--        <el-button @click="">重置</el-button>-->
       </el-form-item>
     </el-form>
-    <json-viewer :value="uploadData" :expand-depth="4" copyable sort />
   </div>
 </template>
 <script>
 import { createMessage } from '@/api/message'
-import JsonViewer from 'vue-json-viewer'
-import axios from 'axios'
-import { fetchList } from '@/api/option'
-
+// import JsonViewer from 'vue-json-viewer'
 export default {
   components: {
-    JsonViewer
+
   },
   data() {
     return {
-      uploadToken: null,
+      urls: ['https://api.kinh.cc/Picture/HuluXia.php', 'https://api.kinh.cc/Picture/AFDian.php', 'https://api.kinh.cc/Picture/Imgbb.php'],
+      url: 'https://api.kinh.cc/Picture/Imgbb.php',
       fileList: [],
-      filename: null,
-      fileBase64: null,
       temp: {
         content: ''
       },
+      files: [],
       uploadData: {}
     }
   },
-  created() {
-    fetchList({ name: 'uploadtoken' }).then(res => {
-      if (res.data.records.length === 1) {
-        this.uploadToken = res.data.records[0].val
-      }
-    })
-  },
   methods: {
-    addFile(file, fileList) {
-      this.getBase64(file.raw).then(res => {
-        const file_name = file.name.split('.')
-        if (file_name.length === 1) {
-          this.filename = this.guid()
-        } else {
-          this.filename = this.guid() + '.' + file_name[1]
-        }
-        this.fileBase64 = res.split(';')[1].split(',')[1]
+    onBefore: function(file) {
+      const size = file.size
+      if (size <= 5242880) {
+        this.url = this.urls[0]
+      } else if (size <= 10485760) {
+        this.url = this.urls[1]
+      } else if (size <= 33554432) {
+        this.url = this.urls[2]
+      } else {
+        this.$message({
+          message: '大小超出限制',
+          type: 'error'
+        })
+        return false
+      }
+      return true
+    },
+    onExceed(files, fileList) {
+      this.$message({
+        message: '数量限制',
+        type: 'success'
       })
     },
-    submitUpload() {
-      if (this.uploadToken === null) {
-        this.$message.warning('现在禁止发送文件')
+    onSuccess(response, file, fileList) {
+      if (response.status !== 0) {
+        fileList.pop()
+        this.$message({
+          message: '文件格式不对',
+          type: 'error'
+        })
         return
       }
-      const loading = this.$loading({
-        lock: true,
-        text: '正在上传',
-        spinner: 'el-icon-loading',
-        background: 'rgba(0, 0, 0, 0.7)'
-      })
-      const url = 'https://api.github.com/repos/dean0731/File/contents/wechat/' + this.filename
-      const headers = { 'Content-Type': 'application/json', 'Authorization': 'token ' + this.uploadToken }
-      const data = { message: 'wechat_tmep提交', content: this.fileBase64 }
-      axios.put(url, data, { headers: headers }).then(res => {
-        loading.close()
-        this.temp.content = '文件:https://cdn.jsdelivr.net/gh/Dean0731/File@main/wechat/' + this.filename + '\n' + this.temp.content
-        this.$message.success('upload success!')
-        this.uploadData = res.data
-      }).catch(err => {
-        loading.close()
-        console.log(err)
-        this.$message.success('upload failed,maybe file formate does not support ')
-      })
-    },
-    getBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader()
-        let fileResult = ''
-        reader.readAsDataURL(file)
-        reader.onload = function() {
-          fileResult = reader.result
-        }
-        reader.onerror = function(error) {
-          reject(error)
-        }
-        reader.onloadend = function() {
-          resolve(fileResult)
-        }
-      })
-    },
-    guid() {
-      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        const r = Math.random() * 16 | 0; const v = c === 'x' ? r : (r & 0x3 | 0x8)
-        return v.toString(16)
-      })
+      for (var i = 0; i < fileList.length; i++) {
+        this.files[i] = { 'name': fileList[i].name, 'link': fileList[i].response.link }
+      }
     },
     createData() {
+      // eslint-disable-next-line no-unused-vars
+      let k = ''
+      for (let i = 0; i < this.files.length; i++) {
+        k += this.files[i].name + ':' + this.files[i].link + '\n'
+      }
+      this.temp.content = k + this.temp.content
       createMessage(this.temp).then(() => {
         this.dialogFormVisible = false
         this.$notify({

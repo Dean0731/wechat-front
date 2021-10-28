@@ -61,10 +61,11 @@ export default {
               type: 'success',
               duration: 2000
             })
-            loading.close()
           })
+          loading.close()
         }
       })
+      loading.close()
     },
     updateData() {
       const loading = loadingFullScreen(this)
@@ -78,13 +79,10 @@ export default {
               type: 'success',
               duration: 2000
             })
-            loading.close()
-            // eslint-disable-next-line handle-callback-err
-          }).catch(err => {
-            loading.close()
           })
         }
       })
+      loading.close()
     }
   }
 }
